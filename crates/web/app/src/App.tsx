@@ -6,6 +6,7 @@ import {
         Card,
         Center,
         Container,
+        Divider,
         Group,
         Image,
         Input,
@@ -45,7 +46,7 @@ export default function App() {
                                         <Center me="xl" ms="xl">
                                                 <Button
                                                         mt="lg"
-                                                        mb="xl"
+                                                        mb="sm"
                                                         color="orange"
                                                         fullWidth
                                                         radius="md"
@@ -53,6 +54,7 @@ export default function App() {
                                                         💾 Add a task
                                                 </Button>
                                         </Center>
+                                        <Divider my="md" mb="xl" />
                                         <List
                                                 ml="md"
                                                 mr="md"
