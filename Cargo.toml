@@ -4,4 +4,6 @@ members = [ "crates/cli","crates/shared" , "crates/web"]
 resolver = "1"
 
 [workspace.dependencies]
-uuid = { version = "=1.7.0", features = ["v4", "js"] }
+uuid = { version = "=1.7.0", features = ["v4", "js", "serde"] }
+clap = { version = "=4.5.3", features = ["derive"] }
+serde = { version = "=1.0.197", features = ["derive"] }

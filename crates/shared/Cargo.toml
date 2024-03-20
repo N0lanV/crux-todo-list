@@ -7,3 +7,5 @@ edition = "2021"
 
 [dependencies]
 uuid.workspace = true
+clap = {workspace = true,  optional = true, default-features = false}
+serde = {workspace = true,  optional = true, default-features = false}

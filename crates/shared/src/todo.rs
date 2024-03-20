@@ -5,8 +5,13 @@ use crate::{
         model::Model,
         message::Message
 };
+#[cfg(feature = "clap")]
+use clap::ValueEnum;
+#[cfg(feature = "serde")]
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Default)]
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 pub struct ModelTodo {
         pub task_new_title: String,
         pub task_new_priority: Priority,
@@ -14,6 +19,7 @@ pub struct ModelTodo {
 }
 
 #[derive(Debug, Clone, Default)]
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 pub struct Task{
         pub id: Uuid,
         pub title: String,
@@ -21,6 +27,8 @@ pub struct Task{
 }
 
 #[derive(Debug, Clone, Default)]
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
+#[cfg_attr(feature = "clap", derive(ValueEnum))]
 pub enum Priority{
         #[default]
         Low,
@@ -36,11 +44,14 @@ impl From<Priority> for String{
                 }
         }
 }
+
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 pub enum CommandTodo{
         Persist(Vec<Task>),
         Load
 }
 
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 pub enum MessageTodo{
         UpdateTaskNewTitle(String),
         UpdateTaskNewPriority(Priority),

@@ -7,9 +7,8 @@ use uuid::Uuid;
 use shared::{
     message::Message,
     model::Model,
-    todo::MessageTodo
+    todo::{MessageTodo, Priority}
 };
-use todo::*;
 use update::update;
 
 /// Todo list
@@ -29,7 +28,7 @@ enum Commands{
         #[arg(short, long)]
         title: String,
         #[arg(short, long)]
-        priority: PriorityCli
+        priority: Priority
     },
     /// Remove task
     RemoveTask {
