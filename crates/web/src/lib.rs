@@ -1,15 +1,14 @@
-pub mod update;
-pub mod command;
 pub mod todo;
+mod update;
+mod command;
 
 use wasm_bindgen::prelude::*;
+use shared::model::Model as ModelShared;
 
 #[wasm_bindgen]
-extern "C" {
-        fn alert(s: &str);
-}
+pub struct Model(ModelShared);
 
 #[wasm_bindgen]
-pub fn greet(name: &str) {
-        alert(&format!("Hello, {}!", name));
+pub fn init() -> Model{
+        Model(ModelShared::default())
 }

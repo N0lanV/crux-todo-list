@@ -17,8 +17,12 @@ import {
 } from "@mantine/core";
 import { theme } from "./theme";
 import img from "./logo-banner-001.png";
+import {init, update, render_todo} from "wasm";
 
 export default function App() {
+        let model= init();
+        update(model, {Todo:{UpdateTaskNewTitle: "test"}});
+        console.log(render_todo(model));
         return (
                 <MantineProvider theme={theme}>
                         <Container size={500} mt="lg">
