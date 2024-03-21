@@ -7,7 +7,7 @@ export const View = {
         Todo: {
                 data: Object.freeze(render_todo(model)),
                 render: render_todo,
-                listeners: [],
+                listeners: new Set(),
                 getSnapshot: () => View.Todo.data,
                 subscribe: (listener) => subscribe(View.Todo, listener),
                 update: (message) => update(View.Todo, {Todo: message}),
@@ -15,11 +15,9 @@ export const View = {
 };
 
 const subscribe = (view, listener) => {
-        view.listeners.push(listener);
+        view.listeners.add(listener);
         console.log({Subscribe: View});
-        return () => {
-                view.listeners = view.listeners.filter(l => l !== listener);
-        }
+        return () => view.listeners.delete(listener);
 }
 const update = (view, message) => {
         updateWasm(model, message);
