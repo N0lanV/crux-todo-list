@@ -12,6 +12,7 @@ use shared::{
 
 #[derive(Deserialize, Serialize)]
 struct View{
+        pub task_new_id: Option<String>,
         pub task_new_title: String,
         pub task_new_priority: Priority,
         pub task_list: Vec<Task>
@@ -21,6 +22,7 @@ struct View{
 pub fn render_todo(model: &crate::Model) -> JsValue{
         let todo = &model.0.todo;
         let view = View{
+                task_new_id: todo.task_new_id.map(|id| id.to_string()),
                 task_new_title: todo.task_new_title.clone(),
                 task_new_priority: todo.task_new_priority.clone(),
                 task_list: model.0.todo.task_map.values()

@@ -48,13 +48,24 @@ fn main() {
 
     match args.command {
         Commands::UpsertTask { id, title, priority  } => {
+            if let Some(id) = id{
+                update(
+                    &mut model,
+                    Message::Todo(MessageTodo::EditTask(id))
+                );
+            }
             update(
                 &mut model,
-                Message::Todo(MessageTodo::UpsertTask {
-                    id,
-                    title,
-                    priority: priority.into()
-                }));
+                Message::Todo(MessageTodo::UpdateTaskNewTitle(title))
+            );
+            update(
+                &mut model,
+                Message::Todo(MessageTodo::UpdateTaskNewPriority(priority))
+            );
+            update(
+                &mut model,
+                Message::Todo(MessageTodo::UpsertTask)
+            );
             println!("{:?}", model);
         }
         Commands::RemoveTask { id } => {

@@ -13,6 +13,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Default)]
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 pub struct ModelTodo {
+        pub task_new_id: Option<Uuid>,
         pub task_new_title: String,
         pub task_new_priority: Priority,
         pub task_map: HashMap<Uuid, Task>
@@ -55,8 +56,10 @@ pub enum CommandTodo{
 pub enum MessageTodo{
         UpdateTaskNewTitle(String),
         UpdateTaskNewPriority(Priority),
-        UpsertTask { id: Option<Uuid>, title: String, priority: Priority },
+        CancelEditTask,
+        UpsertTask,
         RemoveTask(Uuid),
+        EditTask(Uuid),
         LoadTaskList,
         ReplaceTaskList(Vec<Task>),
 }
@@ -74,22 +77,24 @@ pub fn update_todo(
                         model.todo.task_new_priority = priority.clone();
                         None
                 },
+                Message::Todo(MessageTodo::CancelEditTask)=> {
+                        model.todo.task_new_id = None;
+                        model.todo.task_new_title = "".to_string();
+                        model.todo.task_new_priority = Priority::default();
+                        None
+                },
                 Message::Todo(
-                        MessageTodo::UpsertTask {
-                                id,
-                                title,
-                                priority
-                        }
-                )=> {
-                        let id = id.unwrap_or(Uuid::new_v4());
+                        MessageTodo::UpsertTask)=> {
+                        let id = model.todo.task_new_id.unwrap_or(Uuid::new_v4());
                         model.todo.task_map.insert(
                                 id,
                                 Task{
                                         id,
-                                        title: title.clone(),
-                                        priority: priority.clone()
+                                        title: model.todo.task_new_title.clone(),
+                                        priority: model.todo.task_new_priority.clone()
                                 }
                         );
+                        model.todo.task_new_id = None;
                         model.todo.task_new_title = "".to_string();
                         model.todo.task_new_priority = Priority::default();
                         Some(Command::Todo(CommandTodo::Persist(
@@ -103,6 +108,13 @@ pub fn update_todo(
                         Some(Command::Todo(CommandTodo::Persist(
                                 model.todo.task_map.values().cloned().collect()
                         )))
+                },
+                Message::Todo(MessageTodo::EditTask(task_id))=> {
+                        let task = model.todo.task_map.get(&task_id)?;
+                        model.todo.task_new_id = Some(task.id);
+                        model.todo.task_new_title = task.title.clone();
+                        model.todo.task_new_priority = task.priority.clone();
+                        None
                 },
                 Message::Todo(MessageTodo::LoadTaskList)=> {
                         Some(Command::Todo(CommandTodo::Load))
