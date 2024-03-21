@@ -13,12 +13,11 @@ import {
         Text
 } from "@mantine/core";
 import img from "./logo-banner-001.png";
-import {useContext} from "react";
-import {SetViewWasmContext, ViewWasmContext} from "./App.tsx";
+import {useWasm, View} from "./useWasm.js";
 
 export default function Todo() {
-        const view = useContext(ViewWasmContext);
-        const setView = useContext(SetViewWasmContext);
+        const update = View.Todo.update;
+        const todo = useWasm(View.Todo);
 
         return (
                 <Container size={500} mt="lg">
@@ -42,8 +41,8 @@ export default function Todo() {
                                         me="md"
                                         ms="md"
                                         placeholder="Task name"
-                                        value={view.task_new_title}
-                                        onChange={(event) => setView({Todo:{UpdateTaskNewTitle: event.currentTarget.value}})}
+                                        value={todo.task_new_title}
+                                        onChange={(event) => update({UpdateTaskNewTitle: event.currentTarget.value})}
                                 />
                                 <Center me="xl" ms="xl">
                                         <Button
