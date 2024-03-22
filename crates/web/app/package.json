@@ -25,6 +25,7 @@
     "postcss-preset-mantine": "1.13.0",
     "postcss-simple-vars": "^7.0.1",
     "vite": "^5.1.6",
+    "vite-plugin-pwa": "^0.19.6",
     "vite-plugin-top-level-await": "^1.4.1",
     "vite-plugin-wasm": "^3.3.0"
   }

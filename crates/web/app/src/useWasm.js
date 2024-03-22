@@ -20,10 +20,13 @@ const subscribe = (view, listener) => {
         return () => view.listeners.delete(listener);
 }
 const update = (view, message) => {
-        updateWasm(model, message);
-        view.data = Object.freeze(view.render(model));
-        view.listeners.forEach(listener => listener());
-        console.log({Update: View});
+        updateWasm(model, message).then(() => {
+                view.data = Object.freeze(view.render(model));
+                view.listeners.forEach(listener => listener());
+                console.log({Update: View});
+        }).catch((e) => console.log({UpdateFailed: e}));
 }
 
 export const useWasm = (view) => useSyncExternalStore(view.subscribe, view.getSnapshot);
+
+View.Todo.update('LoadTaskList');
